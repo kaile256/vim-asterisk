@@ -33,6 +33,9 @@ Add following line in your vimrc to enable this feature. `let g:asterisk#keeppos
 
 ![](https://raw.githubusercontent.com/haya14busa/i/master/vim-asterisk/asterisk_keeppos.gif)
 
+### 5. Multiple-cursor like dot-repeat
+
+![](https://todo.gif)
 
 Installation
 ------------
