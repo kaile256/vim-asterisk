@@ -74,6 +74,22 @@ map g* <Plug>(asterisk-gz*)
 map g# <Plug>(asterisk-gz#)
 ```
 
+```vim
+xnoremap <expr> x asterisk#substitute('d', 'n', v:register)
+xnoremap <expr> X asterisk#substitute('d', 'N', v:register)
+xnoremap <expr> s asterisk#substitute('c', 'n', v:register)
+xnoremap <expr> S asterisk#substitute('c', 'N', v:register)
+xnoremap <expr> p asterisk#substitute("\<C-r>", 'n', v:register)
+xnoremap <expr> P asterisk#substitute("\<C-r>", 'N', v:register)
+
+xnoremap <expr> <space>x asterisk#substitute('d', 'n', '_')
+xnoremap <expr> <space>X asterisk#substitute('d', 'N', '_')
+xnoremap <expr> <space>s asterisk#substitute('c', 'n', '_')
+xnoremap <expr> <space>S asterisk#substitute('c', 'N', '_')
+xnoremap <expr> <space>p asterisk#substitute("\<C-r>", 'n', '+')
+xnoremap <expr> <space>P asterisk#substitute("\<C-r>", 'N', '+')
+```
+
 To enable keepCursor feature:
 ```vim
 let g:asterisk#keeppos = 1
