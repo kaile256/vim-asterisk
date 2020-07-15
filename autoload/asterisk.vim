@@ -101,6 +101,38 @@ function! asterisk#do(mode, config) abort
     endif
 endfunction
 
+" @return command: String
+function! asterisk#substitute(cmd, direction, regname) abort
+    let cmd = (a:cmd =~? '[dx]' ? 'd' : 'c')
+
+    if a:cmd =~? "\<C-r>"
+        let sequence = '"_cg'. a:direction . a:cmd . a:regname ."\<ESC>"
+    else
+        let sequence = '"'. a:regname . cmd
+    endif
+
+    if mode(1) =~? "\<C-v>" && line("'<") != line("'>")
+        " FIXME:
+        " Vim cannot search patterns blockwise; therefore, vim-asterisk often
+        " fails blockwise over lines. Anyway, just return key sequence without
+        " asterisk here.
+        "
+        " However, it sometimes fails to invoke; typically, it always fails at
+        " once on lazy-load with 'on_func' of dein (a plugin manager).
+        return sequence
+    endif
+
+    " NOTE: The direction depends on a:direction (n or N) no matter which
+    " 'direction' for asterisk#do().
+    let s:asterisk = funcref('asterisk#do', [mode(1), {'direction' : 1, 'do_jump' : 0, 'is_whole' : 0}])
+    if a:cmd =~? "\<C-r>"
+        return s:asterisk() . sequence
+    endif
+
+    let sequence = sequence .'g'. a:direction
+    return s:asterisk() . sequence
+endfunction
+
 "" For keeppos feature
 " NOTE: To avoid hit-enter prompt, this function name should be as short as
 " possible. `r` is short for restore. Should I use more short function using
