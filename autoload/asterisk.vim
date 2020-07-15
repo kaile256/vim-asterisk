@@ -34,6 +34,12 @@ let s:INT = { 'MAX': 2147483647 }
 let s:DIRECTION = { 'forward': 1, 'backward': 0 } " see :h v:searchforward
 
 let g:asterisk#keeppos = get(g:, 'asterisk#keeppos', s:FALSE)
+let g:asterisk#ignorecase_normal =
+\ get(g:, 'asterisk#ignorecase_normal', &ignorecase)
+let g:asterisk#ignorecase_visual =
+\ get(g:, 'asterisk#ignorecase_visual', &ignorecase)
+let g:asterisk#ignorecase_substitute =
+\ get(g:, 'asterisk#ignorecase_substitute', &ignorecase)
 
 " do_jump: do not move cursor if false
 " is_whole: is_whole word. false if `g` flag given (e.g. * -> true, g* -> false)
@@ -215,7 +221,21 @@ endfunction
 "" Set pattern and history for search
 " @return nothing
 function! s:set_search(pattern) abort
-    let @/ = a:pattern
+    let ic = ''
+    if mode() ==# 'v'
+        if g:asterisk#ignorecase_visual < &ignorecase
+            let ic = '\C'
+        elseif g:asterisk#ignorecase_visual > &ignorecase
+            let ic = '\c'
+        endif
+    else
+        if g:asterisk#ignorecase_normal < &ignorecase
+            let ic = '\C'
+        elseif g:asterisk#ignorecase_normal > &ignorecase
+            let ic = '\c'
+        endif
+    endif
+    let @/ = ic . a:pattern
     call histadd('/', @/)
 endfunction
 
